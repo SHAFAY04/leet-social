@@ -11,7 +11,7 @@ public class UserProfile
     public string email{get;set;}
 }
 
-public record UserAuthResponseDto(string accessToken,  string refreshToken );
+public record UserAuthResponseDto(string accessToken,  string refreshToken, UserProfile profile );
 public record UserAuthRequest(string email, string password);
 
 public record RefreshAuthRequest(string refreshToken);

@@ -25,6 +25,7 @@ public class AuthService : IAuthService
 
         var userAuth = await _dbContext.Auth
         .Include(a => a.user)
+        .ThenInclude(u => u.profileMedia)
         .Where(a => a.email == request.email)
         .FirstOrDefaultAsync();
 
@@ -47,9 +48,23 @@ public class AuthService : IAuthService
 
         await _dbContext.SaveChangesAsync();
 
-      
+        string? url = null;
+        if (userAuth.user?.profileMedia?.filePath != null)
+        {
+            url = _mediaService.GetMediaUrl(userAuth.user.profileMedia.filePath);
+        }
 
-        return new UserAuthResponseDto(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken);
+        UserProfile profile = new UserProfile
+        {
+            username = userAuth.user.username,
+            email = userAuth.email,
+            bio = userAuth.user.bio,
+            pronouns = userAuth.user.pronouns,
+            avatarUrl = url
+
+        };
+
+        return new UserAuthResponseDto(accessToken: tokens.accessToken, refreshToken: tokens.refreshToken, profile);
     }
     public async Task Register(UserAuthRequest request)
     {
@@ -65,7 +80,7 @@ public class AuthService : IAuthService
         var hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.password);
 
         UserEntity newUser = new() { username = username };
-        AuthEntity auth = new() { username = username, email = request.email, hashedPassword = hashedPassword,role=RolesEnum.User ,user = newUser };
+        AuthEntity auth = new() { username = username, email = request.email, hashedPassword = hashedPassword, role = RolesEnum.User, user = newUser };
         var newUserAuth = _dbContext.Auth.Add(auth);
 
         await _dbContext.SaveChangesAsync();
