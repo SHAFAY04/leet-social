@@ -15,5 +15,7 @@ public class UserEntity : BaseEntity
 
     public Guid? profileMediaId { get; set; }
 
+    [ForeignKey(nameof(profileMediaId))]
+    public MediaEntity? profileMedia { get; set; } = null;
 
 }

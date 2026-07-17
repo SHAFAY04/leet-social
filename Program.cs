@@ -11,6 +11,7 @@ builder.Services.AddScoped<IAuthService,AuthService>();
 builder.Services.AddScoped<ITokensService, TokensService>();
 builder.Services.AddScoped<IMediaService,mediaService>();
 builder.Services.AddScoped<IS3Service,S3Service>();
+builder.Services.AddScoped<IUserService,UserService>();
 
 
 var dbConnectionString=Environment.GetEnvironmentVariable("DATABASE_URL");
