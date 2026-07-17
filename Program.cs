@@ -11,6 +11,7 @@ var dbConnectionString=Environment.GetEnvironmentVariable("DATABASE_URL");
 builder.Services.AddDbContext<AppDbContext>((options)=>options.UseNpgsql(dbConnectionString));
 
 var app = builder.Build();
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.MapControllers();
 
