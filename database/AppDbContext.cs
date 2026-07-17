@@ -11,4 +11,5 @@ public class AppDbContext : DbContext
 
     public DbSet<UserEntity> Users { get; set; }
     public DbSet<AuthEntity> Auth { get; set; }
+    public DbSet<MediaEntity> Media { get; set; }
 }
